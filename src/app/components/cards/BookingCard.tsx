@@ -18,6 +18,7 @@ import {
   MapPin,
   Phone
 } from 'lucide-react';
+import ErrorBoundary from '../ErrorBoundary';
 
 interface BookingCardProps {
   className?: string;
@@ -32,7 +33,24 @@ const contactFormSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
 
-export default function BookingCard({ className = '' }: BookingCardProps) {
+export default function BookingCardWrapper(props: BookingCardProps) {
+  return (
+    <ErrorBoundary>
+      <BookingCard {...props} />
+    </ErrorBoundary>
+  );
+}
+
+export function ContactForm() {
+  return (
+    <div className="bg-neutral border border-border rounded-3xl p-6">
+      <h3 className="text-xl font-bold text-white mb-4">Quick Contact</h3>
+      <BookingCard />
+    </div>
+  );
+}
+
+function BookingCard({ className = '' }: BookingCardProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -440,15 +458,5 @@ export default function BookingCard({ className = '' }: BookingCardProps) {
         </motion.div>
       </div>
     </section>
-  );
-}
-
-// Export a simple contact form component
-export function ContactForm() {
-  return (
-    <div className="bg-neutral border border-border rounded-3xl p-6">
-      <h3 className="text-xl font-bold text-white mb-4">Quick Contact</h3>
-      <BookingCard />
-    </div>
   );
 }

@@ -1,0 +1,158 @@
+
+> tint-website@0.1.0 dev
+> next dev
+
+   ▲ Next.js 15.4.2
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.18:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1043ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.2s (1467 modules)
+ GET / 200 in 2466ms
+ GET / 200 in 78ms
+ ✓ Compiled in 243ms (1458 modules)
+ GET / 200 in 50ms
+ GET / 200 in 145ms
+ ✓ Compiled in 246ms (1458 modules)
+ GET / 200 in 53ms
+ ✓ Compiled in 268ms (1458 modules)
+ GET / 200 in 51ms
+ ✓ Compiled in 218ms (1458 modules)
+ GET / 200 in 27ms
+ GET / 200 in 136ms
+ ✓ Compiled in 199ms (1458 modules)
+ GET / 200 in 31ms
+ ✓ Compiled in 196ms (1458 modules)
+ GET / 200 in 30ms
+ ✓ Compiled in 130ms (1458 modules)
+ GET / 200 in 33ms
+ ✓ Compiled in 114ms (1458 modules)
+ GET / 200 in 26ms
+ ✓ Compiled in 130ms (1458 modules)
+ GET / 200 in 27ms
+ ✓ Compiled in 164ms (1458 modules)
+ GET / 200 in 35ms
+ ✓ Compiled in 436ms (1458 modules)
+ GET / 200 in 29ms
+ GET / 200 in 133ms
+ ✓ Compiled in 232ms (1458 modules)
+ GET / 200 in 44ms
+ ✓ Compiled in 110ms (1458 modules)
+ GET / 200 in 42ms
+ ✓ Compiled in 193ms (1458 modules)
+ GET / 200 in 32ms
+ ✓ Compiled in 229ms (1458 modules)
+ GET / 200 in 26ms
+ GET / 200 in 119ms
+ ✓ Compiled in 112ms (1458 modules)
+ GET / 200 in 32ms
+ ✓ Compiled in 110ms (1458 modules)
+ GET / 200 in 30ms
+ GET / 200 in 104ms
+ ✓ Compiled in 197ms (1458 modules)
+ GET / 200 in 32ms
+ ✓ Compiled in 106ms (1458 modules)
+ GET / 200 in 25ms
+ ✓ Compiled in 269ms (1458 modules)
+ GET / 200 in 28ms
+ ⨯ ./src/app/components/ui/NewHeader.tsx
+Error:   [31mx[0m Expected '</', got 'jsx text (
+  [31m|[0m
+  [31m|[0m             )'
+     ,-[[36;1;4m/Users/jakejames/Desktop/tint-website/src/app/components/ui/NewHeader.tsx[0m:133:1]
+ [2m130[0m |                       </AnimatePresence>
+ [2m131[0m |                     </div>
+ [2m132[0m |                   ))}
+ [2m133[0m | [35;1m,[0m[35;1m-[0m[35;1m>[0m             </nav>
+ [2m134[0m | [35;1m|[0m   
+ [2m135[0m | [35;1m`[0m[35;1m-[0m[35;1m>[0m             {/* Action Buttons */}
+ [2m136[0m |                 <div className="hidden lg:flex items-center space-x-6 mr-4">
+ [2m137[0m |                   {/* Login Button */}
+ [2m138[0m |                   <motion.button 
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/components/ui/NewHeader.tsx
+./src/app/page.tsx
+ ✓ Compiled in 372ms (1458 modules)
+ GET / 200 in 92ms
+ ⨯ ./src/app/components/ui/NewHeader.tsx
+Error:   [31mx[0m Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+     ,-[[36;1;4m/Users/jakejames/Desktop/tint-website/src/app/components/ui/NewHeader.tsx[0m:165:1]
+ [2m162[0m |       </div>
+ [2m163[0m |     </motion.header>
+ [2m164[0m |   );
+ [2m165[0m | }
+     : [35;1m^[0m
+     `----
+  [31mx[0m Expected '</', got 'jsx text (
+  [31m|[0m   );
+  [31m|[0m })'
+     ,-[[36;1;4m/Users/jakejames/Desktop/tint-website/src/app/components/ui/NewHeader.tsx[0m:163:1]
+ [2m160[0m |               </div>
+ [2m161[0m |             </div>
+ [2m162[0m |           </div>
+ [2m163[0m | [35;1m,[0m[35;1m-[0m[35;1m>[0m     </motion.header>
+ [2m164[0m | [35;1m|[0m     );
+ [2m165[0m | [35;1m`[0m[35;1m-[0m[35;1m>[0m }
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/components/ui/NewHeader.tsx
+./src/app/page.tsx
+ ✓ Compiled in 113ms (1458 modules)
+ GET / 200 in 103ms
+ ✓ Compiled in 146ms (1458 modules)
+ GET / 200 in 37ms
+ ✓ Compiled in 121ms (1458 modules)
+ GET / 200 in 29ms
+ ✓ Compiled in 138ms (1458 modules)
+ GET / 200 in 31ms
+ ✓ Compiled in 146ms (1458 modules)
+ GET / 200 in 28ms
+ ✓ Compiled in 232ms (1458 modules)
+ GET / 200 in 52ms
+ ✓ Compiled in 185ms (1458 modules)
+ GET / 200 in 39ms
+ ✓ Compiled in 272ms (1458 modules)
+ GET / 200 in 27ms
+ ✓ Compiled in 102ms (1458 modules)
+ GET / 200 in 26ms
+ ✓ Compiled in 125ms (1458 modules)
+ GET / 200 in 25ms
+ ✓ Compiled in 164ms (1458 modules)
+ GET / 200 in 28ms
+ ✓ Compiled in 120ms (1458 modules)
+ GET / 200 in 26ms
+ ✓ Compiled in 191ms (1458 modules)
+ GET / 200 in 39ms
+ ✓ Compiled in 104ms (1458 modules)
+ GET / 200 in 25ms
+ ✓ Compiled /about in 415ms (1465 modules)
+ GET /about 200 in 447ms
+ ✓ Compiled /case-studies in 185ms (1484 modules)
+ GET /case-studies 200 in 224ms
+ ✓ Compiled /reviews in 172ms (1505 modules)
+ GET /reviews 200 in 197ms
+ ✓ Compiled /services in 277ms (1520 modules)
+ GET /services 200 in 323ms
+ GET /about 200 in 25ms
+ ✓ Compiled in 270ms (690 modules)
+ GET / 200 in 23ms
+ ✓ Compiled in 125ms (690 modules)
+ GET / 200 in 11ms
+ ✓ Compiled in 155ms (690 modules)
+ GET / 200 in 22ms
+ ✓ Compiled in 134ms (690 modules)
+ GET / 200 in 19ms
+ ✓ Compiled in 148ms (690 modules)
+ GET / 200 in 20ms

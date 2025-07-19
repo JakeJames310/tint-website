@@ -10,12 +10,21 @@ import {
   Lightbulb,
   TrendingUp
 } from 'lucide-react';
+import ErrorBoundary from '../ErrorBoundary';
 
 interface AboutCardProps {
   className?: string;
 }
 
-export default function AboutCard({ className = '' }: AboutCardProps) {
+export default function AboutCardWrapper(props: AboutCardProps) {
+  return (
+    <ErrorBoundary>
+      <AboutCard {...props} />
+    </ErrorBoundary>
+  );
+}
+
+export function AboutCard({ className = '' }: AboutCardProps) {
   const sections = [
     {
       id: 'mission',
@@ -260,18 +269,18 @@ export default function AboutCard({ className = '' }: AboutCardProps) {
 // Export individual section components for reuse
 export function MissionSection({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-neutral border border-border rounded-3xl p-8 ${className}`}>
-      <div className="flex items-start space-x-4 mb-6">
-        <div className="w-12 h-12 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center">
-          <Target size={24} className="text-primary" />
+    <div className={`group bg-neutral border border-border rounded-3xl p-8 hover:border-innovation hover:shadow-glow-innovation hover:bg-neutral/80 transition-all duration-300 ${className}`}>
+      <div className="flex items-start space-x-5 mb-6">
+        <div className="w-14 h-14 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <Target size={28} className="text-black" />
         </div>
-        <div>
-          <h3 className="text-xl font-bold text-white mb-2">Our Mission</h3>
-          <p className="text-innovation font-semibold">Bridging the intelligence dimension with everyday business operations</p>
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-innovation transition-colors duration-300">Our Mission</h3>
+          <p className="text-innovation font-semibold text-base leading-relaxed">Bridging the intelligence dimension with everyday business operations</p>
         </div>
       </div>
-      <p className="text-muted-foreground leading-relaxed">
-        We believe that the future of business lies in the seamless integration of artificial intelligence with human ingenuity.
+      <p className="text-zinc-400 leading-relaxed text-base group-hover:text-zinc-300 transition-colors duration-300">
+        We believe that the future of business lies in the seamless integration of artificial intelligence with human ingenuity, making advanced technology accessible to every entrepreneur.
       </p>
     </div>
   );
@@ -279,18 +288,18 @@ export function MissionSection({ className = '' }: { className?: string }) {
 
 export function TesseractSection({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-neutral border border-border rounded-3xl p-8 ${className}`}>
-      <div className="flex items-start space-x-4 mb-6">
-        <div className="w-12 h-12 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center">
-          <Box size={24} className="text-primary" />
+    <div className={`group bg-neutral border border-border rounded-3xl p-8 hover:border-innovation hover:shadow-glow-innovation hover:bg-neutral/80 transition-all duration-300 ${className}`}>
+      <div className="flex items-start space-x-5 mb-6">
+        <div className="w-14 h-14 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <Box size={28} className="text-black" />
         </div>
-        <div>
-          <h3 className="text-xl font-bold text-white mb-2">The Tesseract Concept</h3>
-          <p className="text-innovation font-semibold">Beyond three dimensions, into the realm of infinite possibilities</p>
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-innovation transition-colors duration-300">The Tesseract Concept</h3>
+          <p className="text-innovation font-semibold text-base leading-relaxed">Beyond three dimensions, into the realm of infinite possibilities</p>
         </div>
       </div>
-      <p className="text-muted-foreground leading-relaxed">
-        We operate in dimensions beyond traditional business thinking, connecting dots across time, space, and technology.
+      <p className="text-zinc-400 leading-relaxed text-base group-hover:text-zinc-300 transition-colors duration-300">
+        We operate in dimensions beyond traditional business thinking, connecting dots across time, space, and technology to unlock new opportunities.
       </p>
     </div>
   );
@@ -298,18 +307,18 @@ export function TesseractSection({ className = '' }: { className?: string }) {
 
 export function FounderSection({ className = '' }: { className?: string }) {
   return (
-    <div className={`bg-neutral border border-border rounded-3xl p-8 ${className}`}>
-      <div className="flex items-start space-x-4 mb-6">
-        <div className="w-12 h-12 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center">
-          <User size={24} className="text-primary" />
+    <div className={`group bg-neutral border border-border rounded-3xl p-8 hover:border-innovation hover:shadow-glow-innovation hover:bg-neutral/80 transition-all duration-300 ${className}`}>
+      <div className="flex items-start space-x-5 mb-6">
+        <div className="w-14 h-14 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+          <User size={28} className="text-black" />
         </div>
-        <div>
-          <h3 className="text-xl font-bold text-white mb-2">Founder Story</h3>
-          <p className="text-innovation font-semibold">From startup dreams to full-time pursuit of innovation</p>
+        <div className="flex-1">
+          <h3 className="text-xl font-bold text-white mb-3 group-hover:text-innovation transition-colors duration-300">Founder Story</h3>
+          <p className="text-innovation font-semibold text-base leading-relaxed">From startup dreams to full-time pursuit of innovation</p>
         </div>
       </div>
-      <p className="text-muted-foreground leading-relaxed">
-        What began as a side project has evolved into a full-time mission to democratize AI technology.
+      <p className="text-zinc-400 leading-relaxed text-base group-hover:text-zinc-300 transition-colors duration-300">
+        What began as a side project has evolved into a full-time mission to democratize AI technology and empower businesses to thrive in the digital age.
       </p>
     </div>
   );

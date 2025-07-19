@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ErrorBoundary from './components/ErrorBoundary';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -77,8 +78,10 @@ export default function RootLayout({
       </head>
       <body className="antialiased bg-black text-white min-h-screen">
         {/* Main Content */}
-        <main id="main-content" className="relative z-10">
-          {children}
+        <main id="main-content" className="relative">
+          <ErrorBoundary>
+            {children}
+          </ErrorBoundary>
         </main>
         
         {/* Modal Portal Container */}

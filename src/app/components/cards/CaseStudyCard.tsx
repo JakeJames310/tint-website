@@ -12,6 +12,7 @@ import {
   Zap,
   CheckCircle
 } from 'lucide-react';
+import ErrorBoundary from '../ErrorBoundary';
 
 interface CaseStudyCardProps {
   onCaseStudyClick?: (caseStudy: string) => void;
@@ -37,7 +38,15 @@ interface CaseStudy {
   investment: string;
 }
 
-export default function CaseStudyCard({ onCaseStudyClick, className = '' }: CaseStudyCardProps) {
+export default function CaseStudyCardWrapper(props: CaseStudyCardProps) {
+  return (
+    <ErrorBoundary>
+      <CaseStudyCard {...props} />
+    </ErrorBoundary>
+  );
+}
+
+export function CaseStudyCard({ onCaseStudyClick, className = '' }: CaseStudyCardProps) {
   const caseStudies: CaseStudy[] = [
     {
       id: 'retail-automation',

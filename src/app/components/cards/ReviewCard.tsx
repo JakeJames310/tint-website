@@ -11,6 +11,7 @@ import {
   Building,
   Zap
 } from 'lucide-react';
+import ErrorBoundary from '../ErrorBoundary';
 
 interface ReviewCardProps {
   className?: string;
@@ -29,7 +30,23 @@ interface Review {
   avatar?: string;
 }
 
-export default function ReviewCard({ 
+export default function ReviewCardWrapper({ 
+  className = '', 
+  autoPlay = true, 
+  autoPlayInterval = 5000 
+}: ReviewCardProps) {
+  return (
+    <ErrorBoundary>
+      <ReviewCard 
+        className={className} 
+        autoPlay={autoPlay} 
+        autoPlayInterval={autoPlayInterval} 
+      />
+    </ErrorBoundary>
+  );
+}
+
+export function ReviewCard({ 
   className = '', 
   autoPlay = true, 
   autoPlayInterval = 5000 
@@ -378,35 +395,36 @@ export function SimpleReviewCard({
   content: string;
 }) {
   return (
-    <div className="bg-neutral border border-border rounded-3xl p-6 hover:border-innovation hover:shadow-glow-innovation transition-all duration-300">
-      <div className="flex items-center mb-4">
-        <div className="flex space-x-1 mr-3">
+    <div className="group bg-neutral border border-border rounded-3xl p-6 hover:border-innovation hover:shadow-glow-innovation hover:bg-neutral/80 transition-all duration-300 h-full flex flex-col">
+      <div className="flex items-center justify-between mb-5">
+        <div className="flex space-x-1">
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              size={16}
+              size={18}
               className={`${
                 i < rating
-                  ? 'text-innovation fill-current'
-                  : 'text-muted-foreground'
-              }`}
+                  ? 'text-innovation fill-current drop-shadow-sm'
+                  : 'text-zinc-600'
+              } transition-colors duration-300`}
             />
           ))}
         </div>
-        <span className="text-sm text-muted-foreground">{rating}/5</span>
+        <span className="text-sm font-medium text-innovation bg-innovation/10 px-2 py-1 rounded-full">{rating}/5</span>
       </div>
       
-      <blockquote className="text-sm text-white mb-4 leading-relaxed">
+      <blockquote className="text-base text-white mb-6 leading-relaxed flex-1 group-hover:text-zinc-100 transition-colors duration-300">
         &ldquo;{content}&rdquo;
       </blockquote>
       
-      <div className="flex items-center space-x-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-innovation to-trust rounded-full flex items-center justify-center">
-          <User size={16} className="text-primary" />
+      <div className="flex items-center space-x-4 pt-4 border-t border-border/50">
+        <div className="w-12 h-12 bg-gradient-to-br from-innovation to-trust rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+          <User size={20} className="text-black" />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-white">{name}</p>
-          <p className="text-xs text-muted-foreground">{role} at {company}</p>
+        <div className="flex-1">
+          <p className="text-sm font-bold text-white group-hover:text-innovation transition-colors duration-300">{name}</p>
+          <p className="text-xs text-zinc-400 group-hover:text-zinc-300 transition-colors duration-300 font-medium">{role}</p>
+          <p className="text-xs text-zinc-500 group-hover:text-zinc-400 transition-colors duration-300">{company}</p>
         </div>
       </div>
     </div>

@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { Resend } from 'resend';
+import React from 'react';
+import { ContactFormEmail } from '../../../../emails/ContactFormEmail';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Contact form validation schema
 const contactFormSchema = z.object({
@@ -11,85 +16,60 @@ const contactFormSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
 
-// Email template function
-function generateEmailHTML(data: ContactFormData): string {
-  return `
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>New Contact Form Submission - Tesseract Integrations</title>
-      <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #25FC11, #0C8102); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        .content { background: #f9f9f9; padding: 20px; border-radius: 10px; }
-        .field { margin-bottom: 15px; }
-        .label { font-weight: bold; color: #25FC11; }
-        .value { margin-top: 5px; padding: 10px; background: white; border-radius: 5px; border-left: 4px solid #25FC11; }
-        .footer { margin-top: 20px; padding: 15px; background: #eee; border-radius: 5px; font-size: 12px; color: #666; }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <div class="header">
-          <h1>🚀 New Contact Form Submission</h1>
-          <p>Tesseract Integrations - AI Transformation Inquiry</p>
-        </div>
-        
-        <div class="content">
-          <div class="field">
-            <div class="label">👤 Name:</div>
-            <div class="value">${data.name}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">📧 Email:</div>
-            <div class="value">${data.email}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">🏢 Company:</div>
-            <div class="value">${data.company}</div>
-          </div>
-          
-          <div class="field">
-            <div class="label">💬 Message:</div>
-            <div class="value">${data.message.replace(/\n/g, '<br>')}</div>
-          </div>
-        </div>
-        
-        <div class="footer">
-          <p><strong>Submission Details:</strong></p>
-          <p>📅 Date: ${new Date().toLocaleString()}</p>
-          <p>🌐 IP Address: ${process.env.NODE_ENV === 'production' ? '[Protected]' : '127.0.0.1'}</p>
-          <p>🔗 Source: Tesseract Integrations Website Contact Form</p>
-        </div>
-      </div>
-    </body>
-    </html>
-  `;
+// Simple in-memory email queue
+const emailQueue: Array<{ data: ContactFormData; sanitizedData: ContactFormData; ip: string; submittedAt: string }> = [];
+let isProcessingQueue = false;
+
+async function processEmailQueue() {
+  if (isProcessingQueue) return;
+  isProcessingQueue = true;
+  while (emailQueue.length > 0) {
+    const { sanitizedData, ip, submittedAt } = emailQueue.shift()!;
+    try {
+      const emailHtml = await renderEmailTemplate(sanitizedData, ip, submittedAt);
+      const result = await resend.emails.send({
+        from: 'noreply@tesseractintegrations.com',
+        to: ['info@tesseractintegrations.com'],
+        subject: `New Contact Form Submission from ${sanitizedData.name}`,
+        html: emailHtml,
+      });
+      if (result.error) {
+        console.error('Resend API error:', result.error);
+      } else {
+        console.log('✅ Email sent via Resend:', result);
+      }
+    } catch (error) {
+      console.error('Email queue processing error:', error);
+    }
+  }
+  isProcessingQueue = false;
 }
 
-// Email sending function
-async function sendEmail(data: ContactFormData): Promise<boolean> {
+async function renderEmailTemplate(data: ContactFormData, ip: string, submittedAt: string) {
+  // Render the React email template to HTML
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  return renderToStaticMarkup(
+    React.createElement(ContactFormEmail, {
+      name: data.name,
+      email: data.email,
+      company: data.company,
+      message: data.message,
+      submittedAt,
+      ip,
+    })
+  );
+}
+
+// Email sending function (now queues email)
+async function sendEmail(data: ContactFormData, ip: string): Promise<boolean> {
   try {
-    // For now, just log the submission (development mode)
-    console.log('📧 Contact Form Submission:');
-    console.log('Name:', data.name);
-    console.log('Email:', data.email);
-    console.log('Company:', data.company);
-    console.log('Message:', data.message);
-    console.log('HTML Email:', generateEmailHTML(data));
-    
-    // TODO: Implement actual email sending
-    // You can add Resend, Nodemailer, or any other email service here
-    
+    const submittedAt = new Date().toLocaleString();
+    // Queue the email for sending
+    emailQueue.push({ data, sanitizedData: data, ip, submittedAt });
+    processEmailQueue();
     return true;
-    
   } catch (error) {
-    console.error('Email sending error:', error);
+    console.error('Email queueing error:', error);
     return false;
   }
 }
@@ -131,13 +111,10 @@ export async function POST(request: NextRequest) {
         { status: 429 }
       );
     }
-    
     // Parse request body
     const body = await request.json();
-    
     // Validate input data
     const validationResult = contactFormSchema.safeParse(body);
-    
     if (!validationResult.success) {
       return NextResponse.json(
         { 
@@ -148,9 +125,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
     const formData = validationResult.data;
-    
     // Sanitize data (basic XSS protection)
     const sanitizedData = {
       name: formData.name.replace(/[<>]/g, ''),
@@ -158,23 +133,19 @@ export async function POST(request: NextRequest) {
       company: formData.company.replace(/[<>]/g, ''),
       message: formData.message.replace(/[<>]/g, ''),
     };
-    
-    // Send email
-    const emailSent = await sendEmail(sanitizedData);
-    
+    // Send email (now queues email)
+    const emailSent = await sendEmail(sanitizedData, ip);
     if (!emailSent) {
       return NextResponse.json(
         { 
           success: false, 
-          error: 'Failed to send email. Please try again later.' 
+          error: 'Failed to queue email. Please try again later.' 
         },
         { status: 500 }
       );
     }
-    
     // Log successful submission
     console.log(`✅ Contact form submitted by ${sanitizedData.name} (${sanitizedData.email}) from ${sanitizedData.company}`);
-    
     // Return success response
     return NextResponse.json(
       { 
@@ -184,10 +155,8 @@ export async function POST(request: NextRequest) {
       },
       { status: 200 }
     );
-    
   } catch (error) {
     console.error('Contact API error:', error);
-    
     return NextResponse.json(
       { 
         success: false, 

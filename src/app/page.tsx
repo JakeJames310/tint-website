@@ -1,69 +1,124 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Header from './components/ui/Header';
-import HeroSection from './components/home/HeroSection';
-import NodeGrid from './components/home/NodeGrid';
-import CardOverlay from './components/ui/CardOverlay';
-import { AIConsultingCard, AutomationCard, DigitalTransformationCard } from './components/cards/ServiceCard';
-import { MissionSection, TesseractSection, FounderSection } from './components/cards/AboutCard';
-import { RetailAutomationCard, ServiceTransformationCard, B2BOptimizationCard } from './components/cards/CaseStudyCard';
-import { SimpleReviewCard } from './components/cards/ReviewCard';
-import { ContactForm } from './components/cards/BookingCard';
+import { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import NewHeader from './components/ui/NewHeader';
+import FullWidthChatbot from './components/ui/FullWidthChatbot';
+import Image from 'next/image';
+import { Zap, Target, Users } from 'lucide-react';
 
-// Define the card types
-type CardType = 'services' | 'about' | 'case-studies' | 'reviews' | 'booking' | null;
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  opacity: number;
+}
 
 export default function Home() {
-  const [openCard, setOpenCard] = useState<CardType>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Particle[]>([]);
 
-  // Handle closing cards
-  const handleCloseCard = () => {
-    setOpenCard(null);
-  };
-
-  // Handle ESC key to close cards
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && openCard) {
-        setOpenCard(null);
-      }
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [openCard]);
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-  // Animation variants
+    // Initialize particles
+    const initParticles = () => {
+      const particles: Particle[] = [];
+      const particleCount = Math.min(30, Math.floor(window.innerWidth / 30));
+
+      for (let i = 0; i < particleCount; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 1.5 + 0.5,
+          opacity: Math.random() * 0.3 + 0.1,
+        });
+      }
+      return particles;
+    };
+
+    particlesRef.current = initParticles();
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Update and draw particles
+      particlesRef.current.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+
+        // Wrap around edges
+        if (particle.x < 0) particle.x = canvas.width;
+        if (particle.x > canvas.width) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.height;
+        if (particle.y > canvas.height) particle.y = 0;
+
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(37, 252, 17, ${particle.opacity})`;
+        ctx.fill();
+
+        // Add glow effect
+        ctx.shadowColor = '#25FC11';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', resizeCanvas);
+    };
+  }, []);
+
   const pageVariants = {
     initial: { opacity: 0 },
     animate: { 
       opacity: 1,
       transition: {
         duration: 0.6,
-        staggerChildren: 0.1
+        staggerChildren: 0.2
       }
-    },
-    exit: { 
-      opacity: 0,
-      transition: { duration: 0.3 }
     }
   };
 
-  const sectionVariants = {
-    initial: { opacity: 0, y: 30 },
+  const heroVariants = {
+    initial: { opacity: 0, x: -50 },
     animate: { 
       opacity: 1, 
-      y: 0,
+      x: 0,
       transition: { duration: 0.8 }
     }
   };
 
-  const nodeGridVariants = {
-    initial: { opacity: 0, scale: 0.9 },
+  const logoVariants = {
+    initial: { opacity: 0, x: 50, scale: 0.8 },
     animate: { 
       opacity: 1, 
+      x: 0,
       scale: 1,
       transition: { 
         duration: 0.8,
@@ -72,195 +127,232 @@ export default function Home() {
     }
   };
 
-  const footerVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        duration: 0.6,
-        delay: 0.5
-      }
+  const features = [
+    {
+      icon: Zap,
+      title: "AI-Powered Automation",
+      description: "Streamline operations with intelligent workflows"
+    },
+    {
+      icon: Target,
+      title: "Strategic Implementation",
+      description: "Tailored solutions for your specific industry"
+    },
+    {
+      icon: Users,
+      title: "Expert Consultation",
+      description: "Guidance from AI specialists"
     }
-  };
+  ];
 
   return (
     <motion.div 
-      className="min-h-screen bg-black text-white overflow-x-hidden"
+      className="min-h-screen bg-black text-white"
       variants={pageVariants}
       initial="initial"
       animate="animate"
-      exit="exit"
     >
+      {/* Particle Background */}
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 w-full h-full pointer-events-none z-0"
+      />
+
       {/* Header */}
-      <Header />
+      <NewHeader />
 
-      {/* Hero Section with Overlaid Node Grid */}
-      <motion.div variants={sectionVariants} className="relative pt-20">
-        <HeroSection />
-        
-        {/* Node Grid Overlay - Centered on Hero Content */}
-        <motion.div 
-          className="absolute inset-0 flex items-center justify-center pointer-events-none"
-          style={{ zIndex: 20 }}
-          variants={nodeGridVariants}
-        >
-          <div className="pointer-events-auto">
-            <NodeGrid 
-              onServicesClick={() => setOpenCard('services')}
-              onAboutClick={() => setOpenCard('about')}
-              onCaseStudiesClick={() => setOpenCard('case-studies')}
-              onReviewsClick={() => setOpenCard('reviews')}
-              onBookMeetingClick={() => setOpenCard('booking')}
-              onContactClick={() => setOpenCard('booking')}
-            />
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Card Overlays with AnimatePresence */}
-      <AnimatePresence mode="wait">
-        {/* Services Card */}
-        {openCard === 'services' && (
-          <CardOverlay
-            key="services"
-            isOpen={true}
-            onClose={handleCloseCard}
-            title="Our Services"
-          >
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <AIConsultingCard />
-                <AutomationCard />
-                <DigitalTransformationCard />
-              </div>
-              <div className="text-center pt-6">
-                <button className="btn btn-primary text-lg px-8 py-4">
-                  Explore All Services
-                </button>
-              </div>
-            </div>
-          </CardOverlay>
-        )}
-
-        {/* About Card */}
-        {openCard === 'about' && (
-          <CardOverlay
-            key="about"
-            isOpen={true}
-            onClose={handleCloseCard}
-            title="About Tesseract"
-          >
-            <div className="space-y-6">
-              <MissionSection />
-              <TesseractSection />
-              <FounderSection />
-            </div>
-          </CardOverlay>
-        )}
-
-        {/* Case Studies Card */}
-        {openCard === 'case-studies' && (
-          <CardOverlay
-            key="case-studies"
-            isOpen={true}
-            onClose={handleCloseCard}
-            title="Case Studies"
-          >
-            <div className="space-y-6">
-              <RetailAutomationCard />
-              <ServiceTransformationCard />
-              <B2BOptimizationCard />
-            </div>
-          </CardOverlay>
-        )}
-
-        {/* Reviews Card */}
-        {openCard === 'reviews' && (
-          <CardOverlay
-            key="reviews"
-            isOpen={true}
-            onClose={handleCloseCard}
-            title="Client Reviews"
-          >
-            <div className="space-y-6">
-              <SimpleReviewCard 
-                name="Sarah Chen"
-                company="TechFlow Solutions"
-                role="CEO & Founder"
-                rating={5}
-                content="Tesseract transformed our entire operation. What used to take weeks now happens in hours. The AI implementation was seamless, and the results were immediate."
-              />
-              <SimpleReviewCard 
-                name="Marcus Rodriguez"
-                company="InnovateCorp"
-                role="Operations Director"
-                rating={5}
-                content="The automation solutions they built for us are game-changing. We've reduced operational costs by 60% while improving customer satisfaction scores."
-              />
-              <SimpleReviewCard 
-                name="Dr. Emily Watson"
-                company="FutureScale Inc."
-                role="CTO"
-                rating={5}
-                content="Working with Tesseract was like having a crystal ball for our business. Their predictive analytics and AI insights helped us make decisions that propelled us ahead."
-              />
-            </div>
-          </CardOverlay>
-        )}
-
-        {/* Booking Card */}
-        {openCard === 'booking' && (
-          <CardOverlay
-            key="booking"
-            isOpen={true}
-            onClose={handleCloseCard}
-            title="Get Started"
-          >
-            <ContactForm />
-          </CardOverlay>
-        )}
-      </AnimatePresence>
-
-      {/* Footer */}
-      <motion.footer 
-        className="container mx-auto px-4 py-8 mt-16 border-t border-neutral-800"
-        variants={footerVariants}
-      >
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <motion.div 
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-          >
+      {/* Main Content - Full Viewport Zones */}
+      <div className="relative z-10 min-h-screen w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 h-screen w-full">
+            {/* Hero Content Zone - Left Half */}
             <motion.div 
-              className="w-8 h-8 bg-gradient-to-br from-innovation to-trust rounded-lg flex items-center justify-center"
-              whileHover={{ rotate: 360 }}
-              transition={{ duration: 0.6 }}
+              className="flex flex-col justify-center items-center h-full w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-20"
+              variants={heroVariants}
             >
-              <span className="text-black font-bold text-sm">T</span>
+              <div className="text-center max-w-2xl">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight mb-6">
+                  <span className="block text-white mb-2">Open your Business to</span>
+                  <span className="block text-innovation">the Next Dimension</span>
+                </h1>
+                <p className="text-lg sm:text-xl lg:text-xl xl:text-2xl text-zinc-400 leading-relaxed mb-8">
+                  Bridging human ingenuity and artificial intelligence.
+                </p>
+              </div>
+
+
+              {/* Features */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 xl:gap-10 pt-8 justify-items-center w-full max-w-2xl">
+                {features.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    className="text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + index * 0.1 }}
+                  >
+                    <div className="w-12 h-12 bg-gradient-to-br from-innovation to-trust rounded-xl flex items-center justify-center mx-auto mb-3">
+                      <feature.icon size={24} className="text-black" />
+                    </div>
+                    <h3 className="text-lg lg:text-xl font-semibold text-white mb-2">{feature.title}</h3>
+                    <p className="text-sm lg:text-base text-zinc-400">{feature.description}</p>
+                  </motion.div>
+                ))}
+              </div>
             </motion.div>
-            <span className="text-lg font-semibold">Tesseract Integrations</span>
-          </motion.div>
-          
-          <motion.div 
-            className="flex items-center gap-6 text-sm text-neutral-400"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.8, duration: 0.6 }}
-          >
-            <span>© 2025 Tesseract Integrations. All rights reserved.</span>
-            <motion.a 
-              href="mailto:support@tesseractintegrations.com"
-              className="hover:text-innovation transition-colors"
-              whileHover={{ scale: 1.05, color: '#25FC11' }}
-              transition={{ duration: 0.2 }}
+
+            {/* Logo Zone - Right Half */}
+            <motion.div 
+              className="flex items-center justify-center h-full w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-20"
+              variants={logoVariants}
             >
-              support@tesseractintegrations.com
-            </motion.a>
-          </motion.div>
+              <motion.div 
+                className="relative"
+                animate={{
+                  scale: [1, 1.02, 1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                {/* Breathing Glow Background */}
+                <motion.div 
+                  className="absolute inset-0 bg-innovation/20 rounded-full blur-3xl"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.3, 0.6, 0.3]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Green Blurred Swoosh Animation */}
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: 'conic-gradient(from 0deg, transparent 270deg, #25FC11 300deg, transparent 330deg)',
+                    filter: 'blur(20px)'
+                  }}
+                  animate={{
+                    rotate: [0, 360]
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+                
+                {/* Secondary Swoosh (Opposite Direction) */}
+                <motion.div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    background: 'conic-gradient(from 180deg, transparent 270deg, #0C8102 300deg, transparent 330deg)',
+                    filter: 'blur(15px)'
+                  }}
+                  animate={{
+                    rotate: [360, 0]
+                  }}
+                  transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+                
+                {/* Pulsing Green Glow Behind Logo */}
+                <motion.div
+                  className="absolute rounded-full"
+                  style={{
+                    top: '10%',
+                    left: '10%',
+                    right: '10%',
+                    bottom: '10%',
+                    background: '#25FC11',
+                    filter: 'blur(15px)'
+                  }}
+                  animate={{
+                    opacity: [0.3, 0.7, 0.3],
+                    scale: [1.0, 1.05, 1.0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                
+                {/* Main Logo */}
+                <div className="relative w-80 h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] z-10">
+                  <Image
+                    src="/tint-logo-new.png"
+                    alt="Tesseract Integrations Logo"
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                </div>
+                
+                {/* Floating Particles */}
+                <motion.div
+                  className="absolute top-1/4 right-0 w-3 h-3 bg-innovation rounded-full shadow-lg shadow-innovation/50"
+                  animate={{ 
+                    y: [-10, 10, -10],
+                    opacity: [0.6, 1, 0.6]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.div
+                  className="absolute bottom-1/4 left-0 w-2 h-2 bg-trust rounded-full shadow-lg shadow-trust/50"
+                  animate={{ 
+                    x: [-8, 8, -8],
+                    opacity: [0.7, 1, 0.7]
+                  }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                />
+                <motion.div
+                  className="absolute top-1/2 right-1/4 w-1.5 h-1.5 bg-innovation/80 rounded-full shadow-md shadow-innovation/40"
+                  animate={{ 
+                    scale: [0.8, 1.2, 0.8],
+                    opacity: [0.5, 1, 0.5]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                />
+              </motion.div>
+            </motion.div>
         </div>
-      </motion.footer>
+      </div>
+
+      {/* Chatbot Zone - Full Width */}
+      <FullWidthChatbot />
+
+      {/* Footer Zone - Full Width */}
+      <footer className="relative z-10 border-t border-neutral-800 bg-black/50 backdrop-blur-sm w-full">
+        <div className="w-full px-6 sm:px-8 lg:px-12 xl:px-16 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-innovation to-trust rounded-lg flex items-center justify-center">
+                <span className="text-black font-bold text-sm">T</span>
+              </div>
+              <span className="text-lg font-semibold text-white">Tesseract Integrations</span>
+            </div>
+            
+            <div className="flex flex-col md:flex-row items-center gap-4 text-sm text-zinc-400">
+              <span>© 2025 Tesseract Integrations. All rights reserved.</span>
+              <a 
+                href="mailto:support@tesseractintegrations.com"
+                className="hover:text-innovation transition-colors duration-300"
+              >
+                support@tesseractintegrations.com
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </motion.div>
   );
 }
