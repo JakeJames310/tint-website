@@ -308,89 +308,6 @@ a:hover {
   animation: fade-in 0.6s ease-out;
 }
 
-/* ===== SCROLLBAR ===== */
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--neutral);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--innovation);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--trust);
-}
-
-/* ===== SELECTION ===== */
-
-::selection {
-  background: var(--innovation);
-  color: var(--primary);
-}
-
-/* ===== FOCUS STYLES ===== */
-
-:focus-visible {
-  outline: 2px solid var(--innovation);
-  outline-offset: 2px;
-}
-
-/* ===== RESPONSIVE DESIGN ===== */
-
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2.25rem;
-  }
-  
-  h2 {
-    font-size: 1.875rem;
-  }
-  
-  .card {
-    padding: 1rem;
-  }
-}
-
-/* ===== DARK THEME ENHANCEMENTS ===== */
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Enhanced contrast for dark theme */
-    --muted-foreground: #71717a;
-    --border: #3f3f46;
-    --input: #3f3f46;
-  }
-}
-
-/* ===== ACCESSIBILITY ===== */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ===== PRINT STYLES ===== */
-
-@media print {
-  * {
-    background: transparent !important;
-    color: black !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-}
-
 /* ===== CUSTOM ANIMATIONS ===== */
 
 @keyframes glow-pulse {
@@ -486,3 +403,87 @@ a:hover {
 .animate-particle-float {
   animation: particle-float 4s ease-in-out infinite;
 }
+
+/* ===== SCROLLBAR ===== */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--neutral);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--innovation);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--trust);
+}
+
+/* ===== SELECTION ===== */
+
+::selection {
+  background: var(--innovation);
+  color: var(--primary);
+}
+
+/* ===== FOCUS STYLES ===== */
+
+:focus-visible {
+  outline: 2px solid var(--innovation);
+  outline-offset: 2px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2.25rem;
+  }
+  
+  h2 {
+    font-size: 1.875rem;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+}
+
+/* ===== DARK THEME ENHANCEMENTS ===== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Enhanced contrast for dark theme */
+    --muted-foreground: #71717a;
+    --border: #3f3f46;
+    --input: #3f3f46;
+  }
+}
+
+/* ===== ACCESSIBILITY ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}
+

@@ -20,7 +20,15 @@
       "Bash(brew install:*)",
       "Bash(git --version)",
       "Bash(git config:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(kill:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(true)",
+      "Bash(NODE_ENV=development npx next dev --turbo)",
+      "Bash(sudo pfctl:*)"
     ],
     "deny": []
   }

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import NewHeader from './components/ui/NewHeader';
-import FullWidthChatbot from './components/ui/FullWidthChatbot';
+import ImprovedChatbot from './components/ui/ImprovedChatbot';
 import Image from 'next/image';
 import { Zap, Target, Users } from 'lucide-react';
 
@@ -328,7 +328,7 @@ export default function Home() {
       </div>
 
       {/* Chatbot Zone - Full Width */}
-      <FullWidthChatbot />
+      <ImprovedChatbot />
 
       {/* Footer Zone - Full Width */}
       <footer className="relative z-10 border-t border-neutral-800 bg-black/50 backdrop-blur-sm w-full">

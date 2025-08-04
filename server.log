@@ -156,3 +156,25 @@ Import trace for requested module:
  GET / 200 in 19ms
  ✓ Compiled in 148ms (690 modules)
  GET / 200 in 20ms
+ ✓ Compiled in 111ms (690 modules)
+ GET / 200 in 9ms
+ ✓ Compiled in 127ms (690 modules)
+ GET / 200 in 20ms
+ ✓ Compiled in 80ms (690 modules)
+ GET / 200 in 6ms
+ ✓ Compiled in 430ms (1534 modules)
+ GET / 200 in 44ms
+ ✓ Compiled in 257ms (1534 modules)
+ GET / 200 in 53ms
+ GET / 200 in 171ms
+   Reload env: .env.local
+ ✓ Compiled in 266ms (1520 modules)
+ ✓ Compiled in 79ms (690 modules)
+ ✓ Compiled in 99ms (1520 modules)
+ ✓ Compiled in 453ms (1536 modules)
+ ✓ Compiled in 186ms (1536 modules)
+ ✓ Compiled in 164ms (1536 modules)
+ ✓ Compiled in 193ms (691 modules)
+ ✓ Compiled in 81ms (691 modules)
+ ✓ Compiled in 74ms (691 modules)
+[?25h
