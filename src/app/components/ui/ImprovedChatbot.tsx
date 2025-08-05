@@ -68,15 +68,18 @@ export default function ImprovedChatbot() {
           }),
         });
 
+        // Check response status first
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('API Error Response:', errorData);
+          throw new Error(errorData.error || 'Failed to send message');
+        }
+
         const data = await response.json();
         
         // Debug logging
         console.log('API Response:', data);
         console.log('Reply content:', data.reply);
-
-        if (!response.ok) {
-          throw new Error(data.error || 'Failed to send message');
-        }
 
         // Update conversation ID if not set
         if (!conversationId && data.conversationId) {

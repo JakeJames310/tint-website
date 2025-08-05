@@ -14,7 +14,8 @@ interface ChatResponse {
 }
 
 // Get webhook URL from environment variable
-const WEBHOOK_URL = process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL;
+// Note: In API routes, we don't use NEXT_PUBLIC_ prefix
+const WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || process.env.NEXT_PUBLIC_N8N_WEBHOOK_URL;
 
 export async function POST(request: NextRequest) {
   console.log('Chat API called');
