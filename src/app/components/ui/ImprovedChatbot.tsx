@@ -225,7 +225,7 @@ export default function ImprovedChatbot() {
                           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                         >
                           <div style={{padding: '0 5%'}}>
-                            <p className="leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                            <p className="leading-relaxed whitespace-pre-wrap break-words" style={msg.role === 'assistant' ? { color: '#000000' } : {}}>{msg.content}</p>
                           </div>
                         </motion.div>
                       </motion.div>
