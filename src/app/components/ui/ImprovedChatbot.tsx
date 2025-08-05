@@ -199,7 +199,7 @@ export default function ImprovedChatbot() {
                 className="relative"
               >
                 <div className="max-h-[400px] overflow-y-auto overflow-x-hidden">
-                  <div className="relative py-6 space-y-4 scroll-smooth" style={{padding: '24px 5% 24px 5%'}}>
+                  <div className="relative py-6 space-y-4 scroll-smooth" style={{padding: '24px 2% 24px 2%'}}>
                   <AnimatePresence mode="popLayout">
                     {messages.map((msg) => (
                       <motion.div
@@ -224,7 +224,9 @@ export default function ImprovedChatbot() {
                           whileHover={{ scale: 1.02 }}
                           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                         >
-                          <p className="leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                          <div style={{padding: '0 5%'}}>
+                            <p className="leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                          </div>
                         </motion.div>
                       </motion.div>
                     ))}
