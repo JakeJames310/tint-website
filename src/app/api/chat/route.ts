@@ -81,8 +81,12 @@ export async function POST(request: NextRequest) {
     // Extract reply from n8n webhook response format
     let replyContent: string;
     
+    // Handle n8n object format: { "content": "message" }
+    if (webhookData.content) {
+      replyContent = webhookData.content;
+    }
     // Handle n8n array format: [{ "content": "message" }]
-    if (Array.isArray(webhookData) && webhookData.length > 0 && webhookData[0].content) {
+    else if (Array.isArray(webhookData) && webhookData.length > 0 && webhookData[0].content) {
       replyContent = webhookData[0].content;
     } 
     // Handle object format for backward compatibility
@@ -91,6 +95,7 @@ export async function POST(request: NextRequest) {
     } 
     // Default fallback
     else {
+      console.error('Unable to extract reply from webhook response:', webhookData);
       replyContent = 'I received your message but could not generate a response.';
     }
 
