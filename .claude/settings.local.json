@@ -28,7 +28,8 @@
       "mcp__ide__getDiagnostics",
       "Bash(true)",
       "Bash(NODE_ENV=development npx next dev --turbo)",
-      "Bash(sudo pfctl:*)"
+      "Bash(sudo pfctl:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }

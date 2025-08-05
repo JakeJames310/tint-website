@@ -163,12 +163,15 @@ export default function Home() {
 
       {/* Main Content - Full Viewport Zones */}
       <div className="relative z-10 min-h-screen w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 h-screen w-full">
+        {/* Mobile-specific padding-top to account for fixed header */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:h-screen w-full">
             {/* Hero Content Zone - Left Half */}
             <motion.div 
-              className="flex flex-col justify-center items-center h-full w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-20"
+              className="flex flex-col justify-start lg:justify-center items-center min-h-[calc(100vh-80px)] lg:h-full w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-8 lg:py-20"
               variants={heroVariants}
             >
+              {/* Spacer for mobile to push content below header */}
+              <div className="h-20 lg:hidden flex-shrink-0" />
               <div className="text-center max-w-2xl">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-tight mb-6">
                   <span className="block text-white mb-2">Open your Business to</span>
@@ -181,7 +184,7 @@ export default function Home() {
 
 
               {/* Features */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 xl:gap-10 pt-8 justify-items-center w-full max-w-2xl">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 xl:gap-10 pt-4 sm:pt-6 lg:pt-8 justify-items-center w-full max-w-2xl mb-8 lg:mb-0">
                 {features.map((feature, index) => (
                   <motion.div
                     key={index}
@@ -202,7 +205,7 @@ export default function Home() {
 
             {/* Logo Zone - Right Half */}
             <motion.div 
-              className="flex items-center justify-center h-full w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-20"
+              className="flex items-center justify-center min-h-[50vh] sm:min-h-[60vh] lg:h-full w-full px-4 sm:px-6 lg:px-8 xl:px-12 py-8 sm:py-12 lg:py-20"
               variants={logoVariants}
             >
               <motion.div 
@@ -287,7 +290,7 @@ export default function Home() {
                 />
                 
                 {/* Main Logo */}
-                <div className="relative w-80 h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] z-10">
+                <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 xl:w-[28rem] xl:h-[28rem] 2xl:w-[32rem] 2xl:h-[32rem] z-10">
                   <Image
                     src="/tint-logo-new.png"
                     alt="Tesseract Integrations Logo"

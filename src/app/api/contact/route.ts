@@ -4,7 +4,7 @@ import { Resend } from 'resend';
 import React from 'react';
 import { ContactFormEmail } from '../../../../emails/ContactFormEmail';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 // Contact form validation schema
 const contactFormSchema = z.object({
@@ -27,16 +27,20 @@ async function processEmailQueue() {
     const { sanitizedData, ip, submittedAt } = emailQueue.shift()!;
     try {
       const emailHtml = await renderEmailTemplate(sanitizedData, ip, submittedAt);
-      const result = await resend.emails.send({
-        from: 'noreply@tesseractintegrations.com',
-        to: ['info@tesseractintegrations.com'],
-        subject: `New Contact Form Submission from ${sanitizedData.name}`,
-        html: emailHtml,
-      });
-      if (result.error) {
-        console.error('Resend API error:', result.error);
+      if (resend) {
+        const result = await resend.emails.send({
+          from: 'noreply@tesseractintegrations.com',
+          to: ['info@tesseractintegrations.com'],
+          subject: `New Contact Form Submission from ${sanitizedData.name}`,
+          html: emailHtml,
+        });
+        if (result.error) {
+          console.error('Resend API error:', result.error);
+        } else {
+          console.log('✅ Email sent via Resend:', result);
+        }
       } else {
-        console.log('✅ Email sent via Resend:', result);
+        console.log('⚠️ Resend API key not configured, skipping email send');
       }
     } catch (error) {
       console.error('Email queue processing error:', error);

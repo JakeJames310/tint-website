@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { Sparkles, Loader2, AlertCircle, X } from 'lucide-react';
+import { useAuth } from '@/app/contexts/AuthContext';
+import LoginModal from '@/app/components/auth/LoginModal';
 
 interface Message {
   id: string;
@@ -19,9 +21,12 @@ export default function ImprovedChatbot() {
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const controls = useAnimation();
+  
+  const { isAuthenticated, hasSkippedAuth, user } = useAuth();
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -40,6 +45,12 @@ export default function ImprovedChatbot() {
   }, [messages.length, isFocused, error, controls]);
 
   const handleSend = async () => {
+    // Check if user is authenticated or has skipped auth
+    if (!isAuthenticated && !hasSkippedAuth) {
+      setShowLoginModal(true);
+      return;
+    }
+
     if (message.trim() && !isLoading) {
       const userMessage = message.trim();
       setMessage('');
@@ -65,6 +76,7 @@ export default function ImprovedChatbot() {
           body: JSON.stringify({
             message: userMessage,
             conversationId: conversationId,
+            userId: user?.email, // Include user email for personalization
           }),
         });
 
@@ -262,7 +274,15 @@ export default function ImprovedChatbot() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              onFocus={() => setIsFocused(true)}
+              onFocus={() => {
+                // Check auth when user focuses input
+                if (!isAuthenticated && !hasSkippedAuth) {
+                  setShowLoginModal(true);
+                  inputRef.current?.blur();
+                } else {
+                  setIsFocused(true);
+                }
+              }}
               onBlur={() => setIsFocused(false)}
               placeholder={messages.length === 0 ? "Message Tesseract AI..." : "Type your message..."}
               disabled={isLoading}
@@ -317,6 +337,13 @@ export default function ImprovedChatbot() {
           Powered by advanced AI • Click enter to send chat
         </motion.p>
       </div>
+      
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        message="Sign in to chat with Tesseract AI"
+      />
     </div>
   );
 }

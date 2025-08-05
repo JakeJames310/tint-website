@@ -4,10 +4,14 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronDown, LogIn } from 'lucide-react';
+import { ChevronDown, LogIn, Menu, X } from 'lucide-react';
+import { useAuth } from '@/app/contexts/AuthContext';
+import UserMenu from '@/app/components/auth/UserMenu';
 
 export default function NewHeader() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated, signIn, isLoading } = useAuth();
 
   const navItems = [
     {
@@ -81,7 +85,15 @@ export default function NewHeader() {
             </motion.div>
           </Link>
 
-          <div className="flex items-center justify-between flex-1 ml-16">
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden p-2 text-white hover:text-innovation transition-colors"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+
+          <div className="hidden lg:flex items-center justify-between flex-1 ml-16">
             {/* Navigation */}
             <nav className="hidden lg:flex items-center justify-center flex-1">
               <div className="flex items-center justify-between w-96">
@@ -135,20 +147,89 @@ export default function NewHeader() {
 
             {/* Action Buttons */}
             <div className="hidden lg:flex items-center justify-between w-64">
-              {/* Login Button */}
-              <motion.button 
-                className="flex items-center space-x-2 text-zinc-300 hover:text-white transition-colors duration-300 px-4 py-2 rounded-lg hover:bg-neutral/50"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <LogIn size={16} />
-                <span className="font-medium">Login</span>
-              </motion.button>
+              {/* Login/User Menu */}
+              {isLoading ? (
+                <div className="px-4 py-2">
+                  <div className="w-8 h-8 rounded-full bg-neutral animate-pulse"></div>
+                </div>
+              ) : isAuthenticated ? (
+                <UserMenu />
+              ) : (
+                <motion.button 
+                  onClick={() => signIn()}
+                  className="flex items-center space-x-2 text-zinc-300 hover:text-white transition-colors duration-300 px-4 py-2 rounded-lg hover:bg-neutral/50"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <LogIn size={16} />
+                  <span className="font-medium">Login</span>
+                </motion.button>
+              )}
               <div></div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            className="lg:hidden fixed inset-x-0 top-[70px] z-40 bg-black/95 backdrop-blur-md border-b border-neutral-800"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <nav className="px-6 py-4">
+              {navItems.map((item) => (
+                <div key={item.name} className="mb-4">
+                  <Link href={item.href} onClick={() => setMobileMenuOpen(false)}>
+                    <h3 className="text-white font-medium mb-2">{item.name}</h3>
+                  </Link>
+                  <div className="pl-4 space-y-2">
+                    {item.dropdown.map((dropdownItem, index) => (
+                      <Link 
+                        key={index} 
+                        href={dropdownItem.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <div className="py-2">
+                          <p className="text-innovation text-sm font-medium">{dropdownItem.name}</p>
+                          <p className="text-zinc-500 text-xs">{dropdownItem.description}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              
+              {/* Mobile Login/User Section */}
+              <div className="pt-4 border-t border-neutral-800">
+                {isLoading ? (
+                  <div className="w-8 h-8 rounded-full bg-neutral animate-pulse"></div>
+                ) : isAuthenticated ? (
+                  <div className="flex items-center justify-between">
+                    <span className="text-white text-sm">Logged in</span>
+                    <UserMenu />
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => {
+                      signIn();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="flex items-center space-x-2 text-white w-full py-2"
+                  >
+                    <LogIn size={16} />
+                    <span className="font-medium">Login</span>
+                  </button>
+                )}
+              </div>
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   );
 }

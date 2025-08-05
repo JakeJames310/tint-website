@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import ErrorBoundary from './components/ErrorBoundary';
+import { Providers } from './components/Providers';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("http://localhost:3000"),
+  metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
   openGraph: {
     title: "Open your Business to the Next Dimension",
     description: "Transform your business with cutting-edge technology and innovative solutions.",
@@ -77,12 +78,13 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className="antialiased bg-black text-white min-h-screen">
-        {/* Main Content */}
-        <main id="main-content" className="relative">
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
-        </main>
+        <Providers>
+          {/* Main Content */}
+          <main id="main-content" className="relative">
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+          </main>
         
         {/* Modal Portal Container */}
         <div id="modal-root" className="relative z-50" />
@@ -94,6 +96,7 @@ export default function RootLayout({
         <div id="loading-overlay" className="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-innovation"></div>
         </div>
+        </Providers>
       </body>
     </html>
   );
