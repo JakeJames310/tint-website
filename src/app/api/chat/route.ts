@@ -73,12 +73,31 @@ export async function POST(request: NextRequest) {
 
     // Parse webhook response
     const webhookData = await webhookResponse.json();
+    
+    // Log the webhook response format for debugging
+    console.log('Webhook response format:', JSON.stringify(webhookData, null, 2));
+
+    // Extract reply from n8n webhook response format
+    let replyContent: string;
+    
+    // Handle n8n array format: [{ "content": "message" }]
+    if (Array.isArray(webhookData) && webhookData.length > 0 && webhookData[0].content) {
+      replyContent = webhookData[0].content;
+    } 
+    // Handle object format for backward compatibility
+    else if (webhookData.reply || webhookData.message) {
+      replyContent = webhookData.reply || webhookData.message;
+    } 
+    // Default fallback
+    else {
+      replyContent = 'I received your message but could not generate a response.';
+    }
 
     // Prepare response
     const response: ChatResponse = {
-      reply: webhookData.reply || webhookData.message || 'I received your message but could not generate a response.',
+      reply: replyContent,
       conversationId: webhookPayload.conversationId,
-      metadata: webhookData.metadata
+      metadata: Array.isArray(webhookData) ? webhookData[0] : webhookData.metadata
     };
 
     return NextResponse.json(response, {
