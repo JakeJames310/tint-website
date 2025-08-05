@@ -199,7 +199,7 @@ export default function ImprovedChatbot() {
                 className="relative"
               >
                 <div className="max-h-[400px] overflow-y-auto overflow-x-hidden">
-                  <div className="py-6 space-y-4 scroll-smooth">
+                  <div className="relative py-6 space-y-4 scroll-smooth" style={{padding: '24px 2% 24px 2%'}}>
                   <AnimatePresence mode="popLayout">
                     {messages.map((msg) => (
                       <motion.div
@@ -212,13 +212,13 @@ export default function ImprovedChatbot() {
                           stiffness: 500,
                           damping: 40
                         }}
-                        className={`flex ${msg.role === 'user' ? 'justify-end pr-2' : 'justify-start pl-2'}`}
+                        className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
                         <motion.div
                           className={`max-w-[85%] px-8 py-1.5 rounded-2xl break-words ${
                             msg.role === 'user'
-                              ? 'bg-innovation text-black shadow-lg shadow-innovation/20 text-base relative mr-2 before:absolute before:top-[50%] before:right-[-8px] before:w-0 before:h-0 before:border-l-[10px] before:border-l-innovation before:border-t-[6px] before:border-t-transparent before:border-b-[6px] before:border-b-transparent before:-translate-y-1/2'
-                              : 'bg-zinc-800/80 text-black backdrop-blur-sm text-sm relative ml-2 before:absolute before:top-[50%] before:left-[-8px] before:w-0 before:h-0 before:border-r-[10px] before:border-r-zinc-800/80 before:border-t-[6px] before:border-t-transparent before:border-b-[6px] before:border-b-transparent before:-translate-y-1/2'
+                              ? 'bg-innovation text-black shadow-lg shadow-innovation/20 text-base relative before:absolute before:top-[50%] before:right-[-8px] before:w-0 before:h-0 before:border-l-[10px] before:border-l-innovation before:border-t-[6px] before:border-t-transparent before:border-b-[6px] before:border-b-transparent before:-translate-y-1/2'
+                              : 'bg-zinc-800/80 text-black backdrop-blur-sm text-sm relative before:absolute before:top-[50%] before:left-[-8px] before:w-0 before:h-0 before:border-r-[10px] before:border-r-zinc-800/80 before:border-t-[6px] before:border-t-transparent before:border-b-[6px] before:border-b-transparent before:-translate-y-1/2'
                           }`}
                           whileHover={{ scale: 1.02 }}
                           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
@@ -238,7 +238,7 @@ export default function ImprovedChatbot() {
                         exit={{ opacity: 0, y: -20 }}
                         className="flex justify-start"
                       >
-                        <div className="bg-gradient-to-br from-zinc-700/50 to-zinc-800/50 backdrop-blur-sm text-zinc-200 px-5 py-3 rounded-2xl flex items-center space-x-2 border border-zinc-700/50">
+                        <div className="bg-gradient-to-br from-zinc-700/50 to-zinc-800/50 backdrop-blur-sm text-zinc-200 px-5 py-3 rounded-2xl flex items-center space-x-2 border border-zinc-700/50 max-w-[85%]">
                           <Loader2 size={16} className="animate-spin" />
                           <span className="text-sm">Thinking...</span>
                         </div>
