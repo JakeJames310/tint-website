@@ -115,7 +115,7 @@ export default function ImprovedChatbot() {
 
   const suggestions = [
     "What automation services do you offer?",
-    "Show me some example workflows",
+    "Where can I reach out for more information?",
     "How do I get started with digital transformation?"
   ];
 
@@ -225,7 +225,7 @@ export default function ImprovedChatbot() {
                           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                         >
                           <div style={{padding: '0 5%'}}>
-                            <p className="leading-relaxed whitespace-pre-wrap break-words" style={msg.role === 'assistant' ? { color: '#000000' } : {}}>{msg.content}</p>
+                            <p className="leading-relaxed whitespace-pre-wrap break-words" style={{ color: '#000000' }}>{msg.content}</p>
                           </div>
                         </motion.div>
                       </motion.div>
