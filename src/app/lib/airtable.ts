@@ -1,11 +1,13 @@
 import Airtable from 'airtable';
 
-// Initialize Airtable
-const base = new Airtable({
-  apiKey: process.env.AIRTABLE_API_KEY!,
-}).base(process.env.AIRTABLE_BASE_ID!);
+// Initialize Airtable only if credentials are available
+const base = process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID
+  ? new Airtable({
+      apiKey: process.env.AIRTABLE_API_KEY,
+    }).base(process.env.AIRTABLE_BASE_ID)
+  : null;
 
-const table = base(process.env.AIRTABLE_TABLE_NAME || 'Customers');
+const table = base ? base(process.env.AIRTABLE_TABLE_NAME || 'Customers') : null;
 
 export interface CustomerData {
   email: string;
@@ -23,6 +25,22 @@ export interface CustomerRecord extends CustomerData {
 }
 
 export async function createOrUpdateCustomer(data: CustomerData): Promise<CustomerRecord> {
+  // Return mock data if Airtable is not configured (build time)
+  if (!table) {
+    console.warn('Airtable not configured - returning mock customer record');
+    return {
+      id: 'mock-id',
+      email: data.email,
+      name: data.name,
+      googleId: data.googleId,
+      profilePicture: data.profilePicture,
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString(),
+      loginCount: 1,
+      subscriptionStatus: 'free',
+    };
+  }
+
   try {
     // First, try to find existing customer by googleId
     const existingRecords = await table
@@ -87,6 +105,11 @@ export async function createOrUpdateCustomer(data: CustomerData): Promise<Custom
 }
 
 export async function getCustomerByGoogleId(googleId: string): Promise<CustomerRecord | null> {
+  if (!table) {
+    console.warn('Airtable not configured - returning null');
+    return null;
+  }
+
   try {
     const records = await table
       .select({
@@ -118,6 +141,11 @@ export async function getCustomerByGoogleId(googleId: string): Promise<CustomerR
 }
 
 export async function getCustomerByEmail(email: string): Promise<CustomerRecord | null> {
+  if (!table) {
+    console.warn('Airtable not configured - returning null');
+    return null;
+  }
+
   try {
     const records = await table
       .select({
