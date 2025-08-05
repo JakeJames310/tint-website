@@ -69,6 +69,10 @@ export default function ImprovedChatbot() {
         });
 
         const data = await response.json();
+        
+        // Debug logging
+        console.log('API Response:', data);
+        console.log('Reply content:', data.reply);
 
         if (!response.ok) {
           throw new Error(data.error || 'Failed to send message');
@@ -82,7 +86,7 @@ export default function ImprovedChatbot() {
         // Add assistant response
         const assistantMessage: Message = {
           id: `msg_${Date.now()}_assistant`,
-          content: data.reply,
+          content: data.reply || 'No response received',
           role: 'assistant',
           timestamp: new Date()
         };

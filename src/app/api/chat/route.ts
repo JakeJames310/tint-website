@@ -99,6 +99,9 @@ export async function POST(request: NextRequest) {
       conversationId: webhookPayload.conversationId,
       metadata: Array.isArray(webhookData) ? webhookData[0] : webhookData.metadata
     };
+    
+    // Log the final response being sent to frontend
+    console.log('Sending response to frontend:', JSON.stringify(response, null, 2));
 
     return NextResponse.json(response, {
       headers: {
