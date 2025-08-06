@@ -29,7 +29,9 @@
       "Bash(true)",
       "Bash(NODE_ENV=development npx next dev --turbo)",
       "Bash(sudo pfctl:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(open http://localhost:3001/book-consultation)"
     ],
     "deny": []
   }

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import NewHeader from '../components/ui/NewHeader';
-import { Sparkles, Target, Zap, Users, CheckCircle, ArrowRight } from 'lucide-react';
+import { Sparkles, Target, Zap, CheckCircle, ArrowRight } from 'lucide-react';
 
 export default function AboutTesseract() {
   const fadeInUp = {

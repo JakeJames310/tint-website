@@ -83,7 +83,7 @@ export default function BookConsultation() {
             >
               <h2 className="text-2xl font-bold mb-4">Booking System Coming Soon</h2>
               <p className="text-lg text-zinc-300 mb-8">
-                We're setting up our online scheduling system to make booking your consultation even easier.
+                We&apos;re setting up our online scheduling system to make booking your consultation even easier.
               </p>
               
               <div className="space-y-4">
@@ -102,7 +102,7 @@ export default function BookConsultation() {
                 </motion.a>
                 
                 <p className="text-sm text-zinc-500 mt-4">
-                  We'll respond within 24 hours to find a time that works for you
+                  We&apos;ll respond within 24 hours to find a time that works for you
                 </p>
               </div>
             </motion.div>
