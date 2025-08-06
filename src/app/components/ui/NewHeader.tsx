@@ -15,38 +15,19 @@ export default function NewHeader() {
 
   const navItems = [
     {
-      name: 'Services',
-      href: '/services',
+      name: 'Who We Are',
+      href: '#',
       dropdown: [
-        { name: 'AI Consulting & Implementation', href: '/services#ai-consulting', description: 'Transform your business with cutting-edge AI solutions' },
-        { name: 'Business Process Automation', href: '/services#automation', description: 'Streamline operations with intelligent automation' },
-        { name: 'Digital Transformation', href: '/services#digital-transformation', description: 'Complete digital overhaul for your business' }
+        { name: 'About Tesseract Integrations', href: '/about-tesseract', description: 'Open your business to the next dimension' },
+        { name: 'About Our Founder', href: '/about-founder', description: 'Meet Jake James and learn about our mission' }
       ]
     },
     {
-      name: 'About',
-      href: '/about',
+      name: 'What We Do',
+      href: '#',
       dropdown: [
-        { name: 'Our Mission', href: '/about#mission', description: 'Bridging human ingenuity and AI' },
-        { name: 'The Tesseract Concept', href: '/about#tesseract', description: 'Beyond three dimensions' },
-        { name: 'Founder Story', href: '/about#founder', description: 'From startup dreams to innovation' }
-      ]
-    },
-    {
-      name: 'Case Studies',
-      href: '/case-studies',
-      dropdown: [
-        { name: 'Retail Automation', href: '/case-studies#retail', description: '200% revenue increase through AI' },
-        { name: 'Service Transformation', href: '/case-studies#service', description: '60% cost reduction with automation' },
-        { name: 'B2B Optimization', href: '/case-studies#b2b', description: 'Streamlined operations and growth' }
-      ]
-    },
-    {
-      name: 'Reviews',
-      href: '/reviews',
-      dropdown: [
-        { name: 'Client Testimonials', href: '/reviews#testimonials', description: 'What our clients say about us' },
-        { name: 'Success Stories', href: '/reviews#success', description: 'Real results from real businesses' }
+        { name: 'Our Services', href: '/our-services', description: 'Transform your business with custom AI solutions' },
+        { name: 'Book a Consultation', href: '/book-consultation', description: 'Free 30-minute consultation to explore possibilities' }
       ]
     }
   ];
@@ -96,7 +77,7 @@ export default function NewHeader() {
           <div className="hidden lg:flex items-center justify-between flex-1 ml-16">
             {/* Navigation */}
             <nav className="hidden lg:flex items-center justify-center flex-1">
-              <div className="flex items-center justify-between w-96">
+              <div className="flex items-center gap-8">
               {navItems.map((item) => (
                 <div
                   key={item.name}
@@ -104,17 +85,19 @@ export default function NewHeader() {
                   onMouseEnter={() => setActiveDropdown(item.name)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <Link href={item.href}>
-                    <motion.button
-                      className="flex items-center space-x-1 text-white hover:text-innovation transition-colors duration-300 font-medium px-3 py-2 rounded-lg hover:bg-neutral/50"
-                      whileHover={{ scale: 1.02 }}
-                    >
-                      <span>{item.name}</span>
-                      <ChevronDown size={14} className={`transition-transform duration-300 ${
-                        activeDropdown === item.name ? 'rotate-180' : ''
-                      }`} />
-                    </motion.button>
-                  </Link>
+                  <motion.button
+                    className="flex items-center space-x-1 text-white hover:text-innovation transition-colors duration-300 font-medium px-3 py-2 rounded-lg hover:bg-neutral/50"
+                    whileHover={{ scale: 1.02 }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setActiveDropdown(activeDropdown === item.name ? null : item.name);
+                    }}
+                  >
+                    <span>{item.name}</span>
+                    <ChevronDown size={14} className={`transition-transform duration-300 ${
+                      activeDropdown === item.name ? 'rotate-180' : ''
+                    }`} />
+                  </motion.button>
                   
                   {/* Dropdown */}
                   <AnimatePresence>
@@ -184,9 +167,7 @@ export default function NewHeader() {
             <nav className="px-6 py-4">
               {navItems.map((item) => (
                 <div key={item.name} className="mb-4">
-                  <Link href={item.href} onClick={() => setMobileMenuOpen(false)}>
-                    <h3 className="text-white font-medium mb-2">{item.name}</h3>
-                  </Link>
+                  <h3 className="text-white font-medium mb-2">{item.name}</h3>
                   <div className="pl-4 space-y-2">
                     {item.dropdown.map((dropdownItem, index) => (
                       <Link 
