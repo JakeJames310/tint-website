@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     let data;
     try {
       data = await response.json();
-    } catch (e) {
+    } catch {
       // If n8n doesn't return JSON, create a success response
       data = { success: true, message: 'Followup sequence initiated' };
     }
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Enable CORS for this route
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

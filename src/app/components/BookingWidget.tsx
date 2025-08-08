@@ -177,7 +177,7 @@ export default function BookingWidget() {
         const slots = data.slots[dateKey];
         if (slots && Array.isArray(slots)) {
           // Extract time strings from slot objects or use directly if already strings
-          const timeSlots = slots.map((s: any) => typeof s === 'string' ? s : s.time);
+          const timeSlots = slots.map((s: { time: string } | string) => typeof s === 'string' ? s : s.time);
           setAvailableSlots(timeSlots);
         } else {
           console.log('No slots for date, using defaults');
@@ -367,7 +367,7 @@ export default function BookingWidget() {
           Schedule Your AI Transformation Session
         </h1>
         <p className="text-white/90 text-lg">
-          Let's discuss how AI can revolutionize your business operations
+          Let&apos;s discuss how AI can revolutionize your business operations
         </p>
       </div>
 
@@ -575,7 +575,7 @@ export default function BookingWidget() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-300 uppercase tracking-wider mb-2">
-                      What's your biggest operational challenge? *
+                      What&apos;s your biggest operational challenge? *
                     </label>
                     <textarea
                       value={bookingState.contactInfo.challenge}
@@ -727,7 +727,7 @@ export default function BookingWidget() {
                 </div>
                 
                 <h2 className="text-3xl font-bold text-white mb-4">Your Meeting is Confirmed!</h2>
-                <p className="text-gray-300 mb-8">We've sent a calendar invite to your email</p>
+                <p className="text-gray-300 mb-8">We&apos;ve sent a calendar invite to your email</p>
 
                 <div className="bg-black rounded-xl p-6 text-left mb-8 border border-gray-700">
                   <h3 className="text-xl font-semibold text-green-500 mb-4">Meeting Details</h3>
@@ -771,7 +771,7 @@ export default function BookingWidget() {
                       <h4 className="font-semibold text-green-500 mb-2">Prepare for Your Meeting</h4>
                       <ul className="text-sm text-gray-300 space-y-1 list-disc list-inside">
                         <li>Review your current business processes</li>
-                        <li>Identify 3-5 repetitive tasks you'd like to automate</li>
+                        <li>Identify 3-5 repetitive tasks you&apos;d like to automate</li>
                         <li>Consider your timeline and budget for implementation</li>
                         <li>Prepare any questions about AI capabilities</li>
                       </ul>

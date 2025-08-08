@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
         console.log('n8n response missing slots, using defaults');
         data = defaultSlots;
       }
-    } catch (e) {
+    } catch {
       console.log('Could not parse n8n response, using default slots');
       data = defaultSlots;
     }
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Enable CORS for this route
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

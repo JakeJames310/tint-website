@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     let data;
     try {
       data = responseText ? JSON.parse(responseText) : { success: true };
-    } catch (e) {
+    } catch {
       console.log('Could not parse n8n response as JSON, treating as success');
       data = { success: true, message: 'Booking created successfully' };
     }
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Enable CORS for this route
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
